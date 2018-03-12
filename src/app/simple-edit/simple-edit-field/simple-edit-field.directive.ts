@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { SimpleEditFieldOptions } from './simple-edit-field.options';
 import { SimpleEditBlockDirective } from '../simple-edit-block.directive';
 import { Directive, Input, OnInit, Renderer2, ElementRef, HostBinding } from '@angular/core';
@@ -18,11 +18,17 @@ export abstract class SimpleEditFieldDirective implements OnInit {
   public _options = new Subject<SimpleEditFieldOptions>();
   onOptionsChange = this._options.asObservable();
 
-  public value = new Subject<any>();
+  public value = new BehaviorSubject<any>(null);
   onValueChange = this.value.asObservable();
 
   public editable = new Subject<boolean>();
   onEditableChange = this.editable.asObservable();
+
+  focus = new BehaviorSubject<boolean>(false);
+  onFocus = this.focus.asObservable();
+
+  hover = new BehaviorSubject<boolean>(false);
+  onHover = this.hover.asObservable();
 
   constructor(
     public block: SimpleEditBlockDirective,
@@ -33,11 +39,11 @@ export abstract class SimpleEditFieldDirective implements OnInit {
     this.onValueChange.subscribe((value: any) => {
       this.onValueChangeEvent(value);
     });
-    
+
     this.block.onEntityChange.subscribe((entity: any) => {
       this.setValue(entity[this.getFieldName()]);
     });
-    
+
     this.block.onEditableChange.subscribe((editable: boolean) => {
       this.editable.next(editable);
     })
@@ -48,15 +54,18 @@ export abstract class SimpleEditFieldDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.setValue(this.getValue());
+    this.setValue(this.getField());
   }
 
   getValue(): any {
-    return this.getField();
+    return this.value.getValue();
   }
 
   setValue(value: any) {
-    this.setFieldValue(value);
+    if (value != this.getValue()) {
+      this.value.next(value);
+      this.setFieldValue(value);
+    }
   }
 
   setFieldValue(value: any) {
@@ -75,12 +84,26 @@ export abstract class SimpleEditFieldDirective implements OnInit {
     return this.constructor.name.replace('SimpleEdit', 'simpleEdit').replace('Directive', '');
   }
 
+  getFocus(): boolean {
+    return this.focus.getValue();
+  }
+  setFocus(focus: boolean) {
+    this.focus.next(focus);
+  }
+
+  getHover(): boolean {
+    return this.hover.getValue();
+  }
+  setHover(hover: boolean) {
+    this.hover.next(hover);
+  }
+
   onEditableChangeEvent(editable: boolean) {
-    this.render.setAttribute(this.el.nativeElement, 'contentEditable', editable ? 'true' : 'false');
+    console.error('onEditableChangeEvent() function missing');
   }
 
   onValueChangeEvent(value: any) {
-    this.el.nativeElement.innerHTML = value;
+    console.error('onValueChangeEvent() function missing');
   }
 }
 

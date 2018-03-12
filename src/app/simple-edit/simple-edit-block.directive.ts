@@ -44,6 +44,7 @@ export class SimpleEditBlockDirective implements OnInit, AfterViewInit, OnChange
   ngOnInit() {
 
   }
+
   ngDoCheck() {
     var changes = this.entity_differ.diff(this.entity);
     if(changes){
