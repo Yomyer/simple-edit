@@ -9,7 +9,7 @@ export class SimpleEditFieldTextDirective extends SimpleEditFieldDirective {
 
   @Input('simpleEditFieldText') field: any;
 
-  @HostBinding('class.focus') get isFocus(): boolean {
+  @HostBinding('class.simple-edit-focus') get isFocus(): boolean {
     return this.getFocus();
   }
 

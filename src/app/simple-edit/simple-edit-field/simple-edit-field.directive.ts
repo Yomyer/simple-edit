@@ -1,12 +1,14 @@
+import { Subscription } from 'rxjs/Rx';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { SimpleEditFieldOptions } from './simple-edit-field.options';
 import { SimpleEditBlockDirective } from '../simple-edit-block.directive';
-import { Directive, Input, OnInit, Renderer2, ElementRef, HostBinding } from '@angular/core';
+import { Directive, Input, OnInit, Renderer2, ElementRef, HostBinding, OnDestroy } from '@angular/core';
 
 @Directive({
   selector: '[simpleEditField]'
 })
-export abstract class SimpleEditFieldDirective implements OnInit {
+export abstract class SimpleEditFieldDirective implements OnInit, OnDestroy {
+  private subscriptions: Array<Subscription> = [];
 
   @Input('simpleEditField') field: any;
 
@@ -15,20 +17,17 @@ export abstract class SimpleEditFieldDirective implements OnInit {
   set setEditable(value: SimpleEditFieldOptions) {
     this._options.next(this.options = value);
   }
-  public _options = new Subject<SimpleEditFieldOptions>();
+  private _options = new Subject<SimpleEditFieldOptions>();
   onOptionsChange = this._options.asObservable();
 
-  public value = new BehaviorSubject<any>(null);
+  private value = new BehaviorSubject<any>(null);
   onValueChange = this.value.asObservable();
 
-  public editable = new Subject<boolean>();
+  private editable = new Subject<boolean>();
   onEditableChange = this.editable.asObservable();
 
-  focus = new BehaviorSubject<boolean>(false);
-  onFocus = this.focus.asObservable();
-
-  hover = new BehaviorSubject<boolean>(false);
-  onHover = this.hover.asObservable();
+  private _focus = new BehaviorSubject<boolean>(false);
+  onFocus = this._focus.asObservable();
 
   constructor(
     public block: SimpleEditBlockDirective,
@@ -36,25 +35,34 @@ export abstract class SimpleEditFieldDirective implements OnInit {
     public el: ElementRef
   ) {
 
-    this.onValueChange.subscribe((value: any) => {
+    this.subscriptions.push(this.onValueChange.subscribe((value: any) => {
       this.onValueChangeEvent(value);
-    });
+    }));
 
-    this.block.onEntityChange.subscribe((entity: any) => {
-      this.setValue(entity[this.getFieldName()]);
-    });
+    this.subscriptions.push(this.block.onEntityChange.subscribe((entity: any) => {
+      if (this.getFieldName()) {
+        this.setValue(entity[this.getFieldName()]);
+      }
 
-    this.block.onEditableChange.subscribe((editable: boolean) => {
+    }));
+
+    this.subscriptions.push(this.block.onEditableChange.subscribe((editable: boolean) => {
       this.editable.next(editable);
-    })
+    }));
 
-    this.editable.subscribe((editable: boolean) => {
+    this.subscriptions.push(this.editable.subscribe((editable: boolean) => {
       this.onEditableChangeEvent(editable);
-    });
+    }));
   }
 
   ngOnInit() {
     this.setValue(this.getField());
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
   getValue(): any {
@@ -85,17 +93,10 @@ export abstract class SimpleEditFieldDirective implements OnInit {
   }
 
   getFocus(): boolean {
-    return this.focus.getValue();
+    return this._focus.getValue();
   }
   setFocus(focus: boolean) {
-    this.focus.next(focus);
-  }
-
-  getHover(): boolean {
-    return this.hover.getValue();
-  }
-  setHover(hover: boolean) {
-    this.hover.next(hover);
+    this._focus.next(focus);
   }
 
   onEditableChangeEvent(editable: boolean) {

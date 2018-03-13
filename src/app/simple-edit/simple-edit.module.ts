@@ -21,6 +21,9 @@ import { SimpleEditFieldTextDirective } from './simple-edit-field/simple-edit-fi
     SimpleEditRepeaterDirective,
 
     SimpleEditFieldTextDirective
+  ],
+  entryComponents: [
+    SimpleEditActionsComponent
   ]
 })
 export class SimpleEditModule { }
