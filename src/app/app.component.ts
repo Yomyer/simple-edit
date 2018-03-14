@@ -1,3 +1,5 @@
+import { SimpleEditFieldDirective } from './simple-edit/simple-edit-field/simple-edit-field.directive';
+import { SimpleEditService } from './simple-edit/simple-edit.service';
 import { Component, ViewChild } from '@angular/core';
 import { SimpleEditBlockDirective } from './simple-edit/simple-edit-block.directive';
 
@@ -15,13 +17,19 @@ export class AppComponent {
     date: new Date()
   };
 
-  constructor(){
+  constructor(private service: SimpleEditService){
     
   }
 
   ngOnInit() {
     this.block.onSave.subscribe(entity => {
       console.log(entity)
+    })
+    this.service.onChangeCurrentBlock.subscribe(block => {
+      console.log(block);
+    })
+    this.service.onChangeCurrentField.subscribe((field: SimpleEditFieldDirective) => {
+      console.log(field.getValue();
     })
   }
 

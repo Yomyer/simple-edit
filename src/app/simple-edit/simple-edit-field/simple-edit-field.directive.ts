@@ -1,3 +1,4 @@
+import { SimpleEditService } from './../simple-edit.service';
 import { Subscription } from 'rxjs/Rx';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { SimpleEditFieldOptions } from './simple-edit-field.options';
@@ -7,7 +8,7 @@ import { Directive, Input, OnInit, Renderer2, ElementRef, HostBinding, OnDestroy
 @Directive({
   selector: '[simpleEditField]'
 })
-export abstract class SimpleEditFieldDirective implements OnInit, OnDestroy {
+export class SimpleEditFieldDirective implements OnInit, OnDestroy {
   private subscriptions: Array<Subscription> = [];
 
   @Input('simpleEditField') field: any;
@@ -32,7 +33,8 @@ export abstract class SimpleEditFieldDirective implements OnInit, OnDestroy {
   constructor(
     public block: SimpleEditBlockDirective,
     public render: Renderer2,
-    public el: ElementRef
+    public el: ElementRef,
+    public service: SimpleEditService
   ) {
 
     this.subscriptions.push(this.onValueChange.subscribe((value: any) => {
@@ -52,6 +54,13 @@ export abstract class SimpleEditFieldDirective implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.editable.subscribe((editable: boolean) => {
       this.onEditableChangeEvent(editable);
+    }));
+
+    this.subscriptions.push(this.onFocus.subscribe(focus => {
+      if(focus){
+        this.service.setCurrentField(this);
+        this.service.setCurrentBlock(this.block);
+      }
     }));
   }
 

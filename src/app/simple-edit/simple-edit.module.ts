@@ -1,3 +1,4 @@
+import { SimpleEditService } from './simple-edit.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SimpleEditBlockDirective } from './simple-edit-block.directive';
@@ -21,6 +22,9 @@ import { SimpleEditFieldTextDirective } from './simple-edit-field/simple-edit-fi
     SimpleEditRepeaterDirective,
 
     SimpleEditFieldTextDirective
+  ],
+  providers: [
+    SimpleEditService
   ],
   entryComponents: [
     SimpleEditActionsComponent
