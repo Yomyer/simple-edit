@@ -1,10 +1,24 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewEncapsulation } from '@angular/core';
 import { SimpleEditBlockDirective } from '../simple-edit-block.directive';
 
 @Component({
   selector: 'simple-edit-actions',
-  templateUrl: './simple-edit-actions.component.html',
-  styleUrls: ['./simple-edit-actions.component.css']
+  template: `
+    <button class="simple-edit-save" (click)="save()" *ngIf="block.settings.save">
+      <i class="material-icons">save</i>
+    </button>
+    <button class="simple-edit-publish" (click)="publish()" *ngIf="block.settings.publish">
+      <i class="material-icons">block</i>
+      <i class="material-icons">publish</i>
+    </button>
+    <button class="simple-edit-edit" (click)="edit()" *ngIf="block.settings.edit">
+      <i class="material-icons">create</i>
+    </button>
+  `,
+  styles: [`
+    @import "https://fonts.googleapis.com/icon?family=Material+Icons"
+  `],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SimpleEditActionsComponent implements OnInit {
   block: SimpleEditBlockDirective;

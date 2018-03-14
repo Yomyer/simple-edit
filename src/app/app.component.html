@@ -1,4 +1,4 @@
-<div [simpleEditBlock]="entity" [simpleEditBlockEditable]="editable" #block>
+<div [simpleEditBlock]="entity" [simpleEditBlockEditable]="editable" [simpleEditOptions]="{publish: true}" #block>
     <h1 simpleEditFieldText="title"></h1>
     <div simpleEditFieldText="content"></div>
     <div simpleEditFieldText="date"></div>
@@ -6,6 +6,7 @@
 
 <button (click)="editable = true">Enable</button>
 <button (click)="editable = false">Disable</button>
+<button (click)="changeSettings()">Change settings</button>
 
 <hr>
 

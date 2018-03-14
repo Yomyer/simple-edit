@@ -13,7 +13,7 @@ export abstract class SimpleEditFieldDirective implements OnInit, OnDestroy {
   @Input('simpleEditField') field: any;
 
   options: SimpleEditFieldOptions = new SimpleEditFieldOptions();
-  @Input('simpleEditFieldOptions')
+  @Input('simpleEditOptions')
   set setEditable(value: SimpleEditFieldOptions) {
     this._options.next(this.options = value);
   }

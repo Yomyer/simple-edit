@@ -1,7 +1,7 @@
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { Directive, Input, OnInit, AfterViewInit, AfterContentChecked, DoCheck, SimpleChanges, OnChanges, KeyValueDiffers, HostListener, HostBinding, ComponentFactoryResolver, Renderer2, ComponentRef, ViewContainerRef } from '@angular/core';
 import { SimpleEditActionsComponent } from './simple-edit-actions/simple-edit-actions.component';
-import { EIDRM } from 'constants';
+import { SimpleEditBlockOptions } from './simple-edit-block.options';
 
 @Directive({
   selector: '[simpleEditBlock]'
@@ -25,26 +25,26 @@ export class SimpleEditBlockDirective implements OnInit, AfterViewInit, DoCheck 
   private _editable = new BehaviorSubject<boolean>(false);
   onEditableChange = this._editable.asObservable();
 
-  @Input('simpleEditSettings') settings = false;
+  settings: SimpleEditBlockOptions = new SimpleEditBlockOptions();
+  @Input('simpleEditOptions') set setSettings(settings) {
+    this.settings = Object.assign(this.settings, settings);
+  };
 
-  @Input('simpleEditPublic') public = false;
-  private _public = new Subject<boolean>();
-  onPublicChange = this._public.asObservable();
+  private _publish = new Subject<any>();
+  onPublicChange = this._publish.asObservable();
 
-  @Input('simpleEditSave') save = false;
-  private _save = new Subject<boolean>();
+  private _save = new Subject<any>();
   onSave = this._save.asObservable();
 
-  @Input('simpleEditSaveKeyPress') saveOnKeyPress = [];
-  @HostListener('document:keypress', ['$event']) keypress(event: KeyboardEvent){
-    if(this.editable && this.getHover()){
+  private _edit = new Subject<any>();
+  onEdit = this._edit.asObservable();
+
+  @HostListener('document:keydown', ['$event']) keydown(event: KeyboardEvent) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 's' && this.editable && this.getHover()) {
       this.saveEmitter();
+      event.preventDefault();
     }
   }
-
-  @Input('simpleEditEdit') edit = false;
-  private _edit = new Subject<boolean>();
-  onEdit = this._edit.asObservable();
 
   private _hover = new BehaviorSubject<boolean>(false);
   onHover = this._hover.asObservable();
@@ -83,7 +83,6 @@ export class SimpleEditBlockDirective implements OnInit, AfterViewInit, DoCheck 
         this.removeActions();
       }
     })
-
   }
 
   ngDoCheck() {
@@ -132,6 +131,6 @@ export class SimpleEditBlockDirective implements OnInit, AfterViewInit, DoCheck 
   }
 
   publishEmmiter() {
-    this._public.next(this.entity);
+    this._publish.next(this.entity);
   }
 }

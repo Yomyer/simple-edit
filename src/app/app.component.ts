@@ -7,7 +7,7 @@ import { SimpleEditBlockDirective } from './simple-edit/simple-edit-block.direct
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  @ViewChild('block', {read: SimpleEditBlockDirective}) block: SimpleEditBlockDirective
+  @ViewChild(SimpleEditBlockDirective) block: SimpleEditBlockDirective
 
   entity = {
     title: 'xDD',
@@ -16,12 +16,16 @@ export class AppComponent {
   };
 
   constructor(){
-
+    
   }
 
   ngOnInit() {
     this.block.onSave.subscribe(entity => {
       console.log(entity)
     })
+  }
+
+  changeSettings(){
+    this.block.settings.edit = !this.block.settings.edit;
   }
 }
