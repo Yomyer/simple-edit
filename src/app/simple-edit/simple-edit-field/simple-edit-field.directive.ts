@@ -1,9 +1,10 @@
+import { SimpleEditPanelComponent } from './../simple-edit-panel/simple-edit-panel.component';
 import { SimpleEditService } from './../simple-edit.service';
 import { Subscription } from 'rxjs/Rx';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { SimpleEditFieldOptions } from './simple-edit-field.options';
 import { SimpleEditBlockDirective } from '../simple-edit-block.directive';
-import { Directive, Input, OnInit, Renderer2, ElementRef, HostBinding, OnDestroy } from '@angular/core';
+import { Directive, Input, OnInit, Renderer2, ElementRef, HostBinding, OnDestroy, Type } from '@angular/core';
 
 @Directive({
   selector: '[simpleEditField]'
@@ -29,6 +30,14 @@ export class SimpleEditFieldDirective implements OnInit, OnDestroy {
 
   private _focus = new BehaviorSubject<boolean>(false);
   onFocus = this._focus.asObservable();
+
+  public panel: Type<any> = SimpleEditPanelComponent;
+  get hasPanel() {
+    return this.panel ? true : false;
+  }
+
+  parent = this.el.nativeElement.parentNode;
+  element = this.el.nativeElement;
 
   constructor(
     public block: SimpleEditBlockDirective,
@@ -57,7 +66,7 @@ export class SimpleEditFieldDirective implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.onFocus.subscribe(focus => {
-      if(focus){
+      if (focus) {
         this.service.setCurrentField(this);
         this.service.setCurrentBlock(this.block);
       }
@@ -75,7 +84,7 @@ export class SimpleEditFieldDirective implements OnInit, OnDestroy {
   }
 
   getValue(): any {
-    return this.value.getValue();
+    return this.format(this.value.getValue());
   }
 
   setValue(value: any) {
@@ -99,6 +108,10 @@ export class SimpleEditFieldDirective implements OnInit, OnDestroy {
 
   getSelectorName() {
     return this.constructor.name.replace('SimpleEdit', 'simpleEdit').replace('Directive', '');
+  }
+
+  format(value) {
+    return value;
   }
 
   getFocus(): boolean {

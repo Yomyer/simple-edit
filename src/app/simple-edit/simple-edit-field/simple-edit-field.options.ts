@@ -1,4 +1,4 @@
 export class SimpleEditFieldOptions {
-    lenght?: Number = 255;
-    format?: String = 'MM/dd/yyyy @ h:mma';
+    lenght?: number = 255;
+    format?: string = 'MM/dd/yyyy @ h:mma';
 }

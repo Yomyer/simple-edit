@@ -25,11 +25,13 @@ export class AppComponent {
     this.block.onSave.subscribe(entity => {
       console.log(entity)
     })
-    this.service.onChangeCurrentBlock.subscribe(block => {
+    this.service.onChangeActiveBlock.subscribe(block => {
       console.log(block);
     })
-    this.service.onChangeCurrentField.subscribe((field: SimpleEditFieldDirective) => {
-      console.log(field.getValue();
+    this.service.onChangeActiveField.subscribe((field: SimpleEditFieldDirective) => {
+      if(field){
+        console.log(field.getValue());
+      }
     })
   }
 

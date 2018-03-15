@@ -50,6 +50,6 @@ export class SimpleEditFieldTextDirective extends SimpleEditFieldDirective {
   }
 
   onValueChangeEvent(value: any) {
-    this.el.nativeElement.innerHTML = value;
+    this.el.nativeElement.innerHTML = this.format(value);
   }
 }

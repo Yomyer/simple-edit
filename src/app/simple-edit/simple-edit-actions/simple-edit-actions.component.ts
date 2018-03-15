@@ -17,8 +17,7 @@ import { SimpleEditBlockDirective } from '../simple-edit-block.directive';
   `,
   styles: [`
     @import "https://fonts.googleapis.com/icon?family=Material+Icons"
-  `],
-  encapsulation: ViewEncapsulation.None,
+  `]
 })
 export class SimpleEditActionsComponent implements OnInit {
   block: SimpleEditBlockDirective;
