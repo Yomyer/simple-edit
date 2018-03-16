@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i');
+
+:host {
+    font-family: 'Roboto', sans-serif;
+    position: absolute;
+    color: #F0F0F0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    background: #23282A;
+    padding: 0px;
+    border-left: 1px solid #131617;
+    header {
+        height: 40px;
+        line-height: 40px;
+        background: #1D2224;
+        border-bottom:1px solid #131617;
+        padding: 0px 15px;
+    }
+    main{
+
+    }
+    footer{
+
+    }
+}

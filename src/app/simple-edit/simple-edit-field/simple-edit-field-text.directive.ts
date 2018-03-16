@@ -1,11 +1,14 @@
+import { SimpleEditSettingsTextComponent } from './../simple-edit-settings/simple-edit-settings-text.component';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { Directive, Input, HostListener, HostBinding } from '@angular/core';
+import { Directive, Input, HostListener, HostBinding, Type } from '@angular/core';
 import { SimpleEditFieldDirective } from './simple-edit-field.directive';
 
 @Directive({
   selector: '[simpleEditFieldText]'
 })
 export class SimpleEditFieldTextDirective extends SimpleEditFieldDirective {
+
+  public settings: Type<any> = SimpleEditSettingsTextComponent;
 
   @Input('simpleEditFieldText') field: any;
 
@@ -38,9 +41,13 @@ export class SimpleEditFieldTextDirective extends SimpleEditFieldDirective {
     super.ngOnInit();
   }
 
+  getValue() {
+    return this.getField();
+  }
+
   setValue(value: any) {
     if (!this.getFocus()) {
-      super.setValue(value);
+      this.value.next(value);
     }
     super.setFieldValue(value);
   }

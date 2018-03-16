@@ -1,26 +1,21 @@
 import { SimpleEditFieldDirective } from './../simple-edit-field/simple-edit-field.directive';
-import { style } from '@angular/animations';
-import { Component, OnInit, ElementRef, Inject, InjectionToken, Renderer2 } from '@angular/core';
-
+import { Component, OnInit, ElementRef, Inject, InjectionToken, Renderer2, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 
 @Component({
-  selector: 'app-simple-edit-panel',
+  selector: 'simple-edit-panel',
   template: `
-    <h1>Panel</h1>
-    <div>{{ field.getValue() }}</div>
+    <header>Panel</header>
+    <main>
+      <ng-container #settings></ng-container>
+    </main>
   `,
-  styles: [`
-    :host{
-      position: absolute;
-      right:0;
-      top:0;
-      bottom:0;
-      width: 200px;
-      background: red;
-    }
-  `]
+  styles: [require('./simple-edit-panel.component.scss')]
 })
-export class SimpleEditPanelComponent<T> implements OnInit {
+export class SimpleEditPanelComponent implements OnInit {
+  @ViewChild('settings', {
+    read: ViewContainerRef
+  }) settings: ViewContainerRef
+  
   public field: SimpleEditFieldDirective;
   public element: ElementRef;
 
@@ -28,11 +23,16 @@ export class SimpleEditPanelComponent<T> implements OnInit {
     return this.field.render;
   }
 
+  public get factory(): ComponentFactoryResolver {
+    return this.settings.injector.get(ComponentFactoryResolver);
+  }
+
   constructor() { }
 
   ngOnInit() {
     this.render.addClass(document.body, 'siple-edit-panel-opened');
-    this.render.setStyle(document.body, 'margin-right', '200px');
+    this.render.setStyle(document.body, 'margin-right', '300px');
+    this.addSettings();
   }
 
   ngOnDestroy() {
@@ -41,12 +41,13 @@ export class SimpleEditPanelComponent<T> implements OnInit {
     this.render.removeChild(this.element.nativeElement.parentNode, this.element.nativeElement);
   }
 
-  open() {
-    
+  addSettings() {
+    const factory = this.factory.resolveComponentFactory(this.field.settings);
+    const component = this.settings.createComponent(factory);
+    component.instance.field = this.field;
   }
 
-  close() {
+  removeSettings() {
 
   }
-
 }

@@ -1,3 +1,5 @@
+import { SimpleEditSettingsTextComponent } from './simple-edit-settings/simple-edit-settings-text.component';
+import { SimpleEditSettingsComponent } from './simple-edit-settings/simple-edit-settings.component';
 import { SimpleEditFieldDateDirective } from './simple-edit-field/simple-edit-field-date.directive';
 import { SimpleEditService } from './simple-edit.service';
 import { NgModule } from '@angular/core';
@@ -19,7 +21,10 @@ import { SimpleEditPanelComponent } from './simple-edit-panel/simple-edit-panel.
     
     SimpleEditFieldTextDirective,
     SimpleEditFieldDateDirective,
-    SimpleEditPanelComponent
+    SimpleEditPanelComponent,
+
+    SimpleEditSettingsComponent,
+    SimpleEditSettingsTextComponent
   ],
   exports: [
     SimpleEditBlockDirective,
@@ -34,7 +39,10 @@ import { SimpleEditPanelComponent } from './simple-edit-panel/simple-edit-panel.
   ],
   entryComponents: [
     SimpleEditActionsComponent,
-    SimpleEditPanelComponent
+    SimpleEditPanelComponent,
+
+    SimpleEditSettingsComponent,
+    SimpleEditSettingsTextComponent
   ]
 })
 export class SimpleEditModule { }

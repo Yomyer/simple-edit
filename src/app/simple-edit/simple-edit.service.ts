@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { SimpleEditFieldDirective } from './simple-edit-field/simple-edit-field.directive';
 import { SimpleEditBlockDirective } from './simple-edit-block.directive';
 import { Subject } from 'rxjs';
-import { Injectable, Renderer2, RendererFactory2, ComponentFactoryResolver, ComponentRef, Injector, ElementRef, OnInit, ApplicationRef } from '@angular/core';
+import { Type, Injectable, Renderer2, RendererFactory2, ComponentFactoryResolver, ComponentRef, Injector, ElementRef, OnInit, ApplicationRef } from '@angular/core';
 
 @Injectable()
 export class SimpleEditService {
@@ -57,7 +57,7 @@ export class SimpleEditService {
 
   private addPanel() {
     if (!this.panel) {
-      this.panel = this.factory.resolveComponentFactory(this.active_field.panel).create(this.injector);
+      this.panel = this.factory.resolveComponentFactory(SimpleEditPanelComponent).create(this.injector);
       this.applicationRef.attachView(this.panel.hostView);
 
       this.panel.instance.field = this.active_field;
@@ -67,8 +67,6 @@ export class SimpleEditService {
         document.body,
         this.panel_element
       );
-
-      this.panel.instance.ngOnInit();
     }
   }
   private removePanel() {

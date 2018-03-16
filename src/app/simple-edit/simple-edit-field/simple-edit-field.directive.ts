@@ -22,7 +22,7 @@ export class SimpleEditFieldDirective implements OnInit, OnDestroy {
   private _options = new Subject<SimpleEditFieldOptions>();
   onOptionsChange = this._options.asObservable();
 
-  private value = new BehaviorSubject<any>(null);
+  public value = new BehaviorSubject<any>(null);
   onValueChange = this.value.asObservable();
 
   private editable = new Subject<boolean>();
@@ -31,9 +31,9 @@ export class SimpleEditFieldDirective implements OnInit, OnDestroy {
   private _focus = new BehaviorSubject<boolean>(false);
   onFocus = this._focus.asObservable();
 
-  public panel: Type<any> = SimpleEditPanelComponent;
+  public settings: Type<any> = null;
   get hasPanel() {
-    return this.panel ? true : false;
+    return this.settings ? true : false;
   }
 
   parent = this.el.nativeElement.parentNode;
@@ -54,7 +54,6 @@ export class SimpleEditFieldDirective implements OnInit, OnDestroy {
       if (this.getFieldName()) {
         this.setValue(entity[this.getFieldName()]);
       }
-
     }));
 
     this.subscriptions.push(this.block.onEditableChange.subscribe((editable: boolean) => {

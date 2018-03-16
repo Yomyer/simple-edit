@@ -30,7 +30,7 @@ export class AppComponent {
     })
     this.service.onChangeActiveField.subscribe((field: SimpleEditFieldDirective) => {
       if(field){
-        console.log(field.getValue());
+        console.log(field);
       }
     })
   }
